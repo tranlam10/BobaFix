@@ -23,6 +23,13 @@ body {
   width: 100%;
 }
 
+.landing p {
+  text-align: center;
+  margin: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 25px;
+}
+
 form {
   text-align: center;
   top: 50%;
@@ -36,6 +43,7 @@ input {
   cursor: pointer;
   width: 75%;
   height: 45px;
+  padding: 5px;
 }
 
 .locationForm {
@@ -53,6 +61,7 @@ input {
 .magnifyingGlass {
   width: 90px;
   height: 90px;
+  cursor: pointer;
 }
 
 .container {
@@ -93,10 +102,11 @@ ul {
 .down {
   display: block;
   background-color: transparent;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15x;
   margin-left: auto;
   margin-right: auto;
+  cursor: pointer;
 }
 
 .newShop {
@@ -107,10 +117,13 @@ ul {
   font-family: 'Montserrat', sans-serif;
   padding: 10px 20px;
   margin: auto;
-  margin-bottom: 2px;
+  margin-bottom: 15px;
   border-radius: 25px;
 }
 
+h1 {
+  text-align: center;
+}
 .newShop h1 {
   font-size: 20px;
   color: rgba(40, 46, 40, 0.568);
@@ -168,5 +181,9 @@ ul {
 
   input {
     width: 25%;
+  }
+
+  ::placeholder {
+    font-size: 20px;
   }
 }

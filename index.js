@@ -1,14 +1,10 @@
 const yelpAPI = 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search';
-//const yelpAPI = 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?categories=bars&limit=50&location=New York';
 const yelpKey = 'R1kG7qIDMipsR5EThix7_5-WXBTTHvNmadr4dtC5FCbE8I89CNFdPjTlTBube5DQ6xRtnnJuu3BRulcd-ObCOUBxQk2-a6BEmM3Kr_8TqbSJzllj5_xYsm1KTyPZW3Yx';
 const yelpIdAPI = 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/';
 const googleKey = 'AIzaSyAzr3VKSqJeQRLYjyhb9RDUeBXgW1-Jw5A';
 const geocodeAPI = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?';
 
-//set up ajax call that calls when you click the down button
-//make a button that redirects to homepage to restart search
-
-
+//function to convert military time to AM/PM
 function timeChange(time) {
     function insert(str, index, value) {
         return (str.substr(0, index) + value + str.substr(index));
@@ -20,11 +16,14 @@ function timeChange(time) {
         return ('12:00 AM');
     }
     if(time <= 1200) {
-       //return time.split('').splice(2, 0, ':').join();
        return insert(time.toString(), 2, ":") + " AM";
     } else {
         time -= 1200;
-        return insert(time.toString(), 2, ":") + " PM";
+        if (time < 1000) {
+            return ("0" + insert(time.toString(), 1, ":") + " PM");
+        } else {
+            return insert(time.toString(), 2, ":") + " PM";
+        }
     }
 }
 
@@ -39,13 +38,11 @@ function showHours(data) {
 
         //calls yelp "business/id" API to get information about each shop
         let infoTab = $(this).closest('li').find('.moreInfo');
-        console.log(infoTab);
         let id = storeHours[index];
         $.ajax({
             "url": yelpIdAPI + id,
             "dataType": 'json',
             "type": 'GET',
-            //"data": { locale: id },
             "headers": {
                 'Authorization': 'Bearer R1kG7qIDMipsR5EThix7_5-WXBTTHvNmadr4dtC5FCbE8I89CNFdPjTlTBube5DQ6xRtnnJuu3BRulcd-ObCOUBxQk2-a6BEmM3Kr_8TqbSJzllj5_xYsm1KTyPZW3Yx'            
             },
@@ -53,14 +50,6 @@ function showHours(data) {
                 let hours = storeData.hours[0].open;
                 let yelpLink = storeData.url;
 
-                // function time(time) {
-                //     if(time <= 1200) {
-                //        //return time.split('').splice(2, 0, ':').join();
-                //        return time.split('').splice(2, 0, ':').join('');
-                //     }
-                // }
-                // console.log(time(hours[0].start));
-                console.log(timeChange(hours[0].start));
                 infoTab.html(`
                     <h2>Hours:</h2>
                     <p> Mon: ${timeChange(hours[0].start)} - ${timeChange(hours[0].end)} </p>
@@ -86,18 +75,17 @@ function showHours(data) {
 
 //insert the list of shops once the API calls data from YELP
 function insertList(data) {
+    $('.info').append(`
+        <h1>Locations</h1>
+    `);
+    
     for(let i = 0; i < data.businesses.length; i++) {
         let name = data.businesses[i].name;
         let rating = data.businesses[i].rating;
         let amountReviews = data.businesses[i].review_count;
         let phone = data.businesses[i].display_phone;
-        // let storeIds = [];
 
-        // for(let i = 0; i < hours.length; i++) {
-        //     storeHours.push(id);
-        // }
-
-        $('.info').append(`<br>`);
+        //$('.info').append(`<br>`);
         $('.info').append(`
             <li class="newShop">
                 <h1>${name}</h1>
@@ -107,7 +95,6 @@ function insertList(data) {
                 <div class="moreInfo"></div>
             </li>
         `);
-        console.log(i, data.businesses.length);
         if (i == data.businesses.length - 1) {
             showHours(data);
         }
@@ -146,7 +133,6 @@ function initMap(latLong, data) {
 
 //API to fetch YELP data
 function fetchData(latLong, query) {
-    console.log("fetch data is printing latlong" + latLong);
     $.ajax({
         "url": yelpAPI,
         "dataType": 'json',
@@ -167,9 +153,6 @@ function formSubmit() {
     $(".searchForm").submit(function(event){
         event.preventDefault();
         const location = $(event.currentTarget).find('.locationForm').val();
-
-        console.log(location);
-
         const query = {
             term: 'boba',
             location: location
@@ -197,8 +180,3 @@ function formSubmit() {
 }
 
 $(formSubmit);
-
-//make the center the zip code that the user enters
-//for loop iterate all the results received from the API call and this will make a bunch of markers
-//when user clicks on a marker, pop up link to website of the location
-//remove landing page whenever user submits search and replace with map
