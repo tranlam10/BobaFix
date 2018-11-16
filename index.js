@@ -85,7 +85,7 @@ function insertList(data) {
         let amountReviews = data.businesses[i].review_count;
         let phone = data.businesses[i].display_phone;
 
-        //$('.info').append(`<br>`);
+        // $('.info').append(`<br>`);
         $('.info').append(`
             <li class="newShop">
                 <h1>${name}</h1>

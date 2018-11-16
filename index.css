@@ -117,12 +117,14 @@ ul {
   font-family: 'Montserrat', sans-serif;
   padding: 10px 20px;
   margin: auto;
-  margin-bottom: 15px;
   border-radius: 25px;
+  margin-bottom: 15px;
 }
 
 h1 {
   text-align: center;
+  margin: 0;
+  padding: 10px 0;
 }
 .newShop h1 {
   font-size: 20px;
