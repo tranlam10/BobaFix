@@ -83,8 +83,6 @@ function insertList(data) {
     $('.info').append(`
         <h1>Locations</h1>
     `);
-
-    console.log(data);
     
     for(let i = 0; i < data.businesses.length; i++) {
         let name = data.businesses[i].name;
