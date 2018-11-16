@@ -2,8 +2,8 @@
 
 # Screenshots
 
-<img src="/screenshots/landing.png" width="350" title="Landing Page">
-<img src="/screenshots/screenshot.png" width="350" title="Results Page">
+<img src="screenshots/landing.png" width="350" title="Landing Page">
+<img src="screenshots/screenshot.png" width="350" title="Results Page">
 
 # Summary
 
