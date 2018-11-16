@@ -3,6 +3,7 @@ const yelpKey = 'R1kG7qIDMipsR5EThix7_5-WXBTTHvNmadr4dtC5FCbE8I89CNFdPjTlTBube5D
 const yelpIdAPI = 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/';
 const googleKey = 'AIzaSyAzr3VKSqJeQRLYjyhb9RDUeBXgW1-Jw5A';
 const geocodeAPI = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?';
+let map;
 
 //function to convert military time to AM/PM
 function timeChange(time) {
@@ -49,6 +50,7 @@ function showHours(data) {
             "success": function(storeData) {
                 let hours = storeData.hours[0].open;
                 let yelpLink = storeData.url;
+                let latLong = storeData.coordinates;
 
                 infoTab.html(`
                     <h2>Hours:</h2>
@@ -61,6 +63,9 @@ function showHours(data) {
                     <p> Sun: ${hours[6] ? timeChange(hours[6].start):''} - ${hours[6] ? timeChange(hours[6].end):''} </p>
                     <a  class="yelp" href="${yelpLink}">Yelp</a>
                 `);
+
+                map.setZoom(16);
+                map.panTo(new google.maps.LatLng(latLong.latitude, latLong.longitude));
             }
         });
 
@@ -78,18 +83,20 @@ function insertList(data) {
     $('.info').append(`
         <h1>Locations</h1>
     `);
+
+    console.log(data);
     
     for(let i = 0; i < data.businesses.length; i++) {
         let name = data.businesses[i].name;
         let rating = data.businesses[i].rating;
         let amountReviews = data.businesses[i].review_count;
         let phone = data.businesses[i].display_phone;
-
-        // $('.info').append(`<br>`);
+        let address = data.businesses[i].location.address1 + ", " + data.businesses[i].location.city + " " + data.businesses[i].location.state + " " + data.businesses[i].location.zip_code;
         $('.info').append(`
             <li class="newShop">
                 <h1>${name}</h1>
                 <h2>Rating: ${rating} (${amountReviews})</h2>
+                <p>${address}</p>
                 <p>${phone}</p>
                 <img class="down" src="arrow_down.png" alt="down">
                 <div class="moreInfo"></div>
@@ -123,7 +130,7 @@ function putMarkers(data, map) {
 
 //call the Google map and center 
 function initMap(latLong, data) {
-    let map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
       center: latLong
     });
